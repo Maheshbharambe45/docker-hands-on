@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo-app
+    restart: always
+    networks:
+      - node-mongo
+    volumes:
+      - mongo-data:/data/db
+
+  nodejs:
+    build: .
+    container_name: node-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - logs:/usr/src/app/logs
+    networks:
+      - node-mongo
+
+volumes:
+  mongo-data:
+  logs:
+
+networks:
+  node-mongo:
+    driver: bridge

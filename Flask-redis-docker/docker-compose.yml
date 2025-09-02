@@ -1,0 +1,21 @@
+
+services:
+  redis:
+    image: redis
+    networks:
+      - flask-redis
+  
+  flask:
+    build: .
+    ports:
+      - 5000:5000
+    networks:
+      - flask-redis
+    depends_on:
+      - redis
+    environment:
+      - FLASK_ENV=development
+
+networks:
+  flask-redis:
+    driver: bridge
